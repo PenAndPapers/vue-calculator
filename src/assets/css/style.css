@@ -16,17 +16,17 @@ html, body {
 }
 
 .container {
-  padding: 2rem 1rem;
+  padding: 1rem;
   max-width: 420px;
   margin: 0 auto;
 }
 
 input, button {
   outline: none;
-  padding: .5rem;
+  padding: 1rem .5rem;
   font-size: 1rem;
   font-weight: 200;
-  height: 40px;
+  height: auto;
   border-radius: 3px;
   border: none;
 }
@@ -49,6 +49,7 @@ button {
   background: #253238;
   color: #fff;
   cursor: pointer;
+  font-weight: 500;
 }
 
 button:hover {
@@ -69,25 +70,6 @@ sup {
   grid-column: 1 / 9;
 }
 
-.grid.numbers button:first-child,
-.grid.numbers button:nth-child(2),
-.grid.numbers button:nth-child(3),
-.grid.numbers button:nth-child(4),
-.grid.numbers button:nth-child(5),
-.grid.numbers button:nth-child(6) {
-  background:#34383a;
-  color: #fff;
-}
-
-.grid.numbers button:first-child:hover,
-.grid.numbers button:nth-child(2):hover,
-.grid.numbers button:nth-child(3):hover,
-.grid.numbers button:nth-child(4):hover,
-.grid.numbers button:nth-child(5):hover,
-.grid.numbers button:nth-child(6):hover {
-  background: #2d3134;
-}
-
 .grid.numbers button:last-child {
   background: #327434;
   color: #fff;
@@ -97,11 +79,11 @@ sup {
   background: #204922;
 }
 
-.grid.operations {
+.grid.operators {
   grid-column: 9 / 12;
 }
 
-.grid.operations button {
+.grid.operators button {
   grid-column: 1;
   grid-column-start: 1;
   grid-column-end: 12;
@@ -109,14 +91,14 @@ sup {
   color: #fff;
 }
 
-.grid.operations button:hover {
+.grid.operators button:hover {
   background: #0c3143;
 }
 
-.grid.operations button:last-child {
+.grid.operators button:last-child {
   background: #eb2e2e;
 }
 
-.grid.operations button:last-child:hover {
+.grid.operators button:last-child:hover {
   background: #ba2424;
 }

@@ -1,13 +1,11 @@
 <template>
   <div class="calculator">
-    <div class="div">
-      <input
-        type="text"
-        autofocus
-        v-model="equation"
-        @keypress.stop.prevent="restrictNonNumericKeys"
-      >
-    </div>
+    <input
+      type="text"
+      autofocus
+      v-model="equation"
+      @keypress.stop.prevent="restrictNonNumericKeys"
+    >
     <div class="grid">
       <div class="grid numbers">
         <button @click="getSine">sin</button>
@@ -27,14 +25,14 @@
         <button @click="addNumber(3)">3</button>
         <button @click="addNumber(0)">0</button>
         <button @click="addNumber('.')">&bull;</button>
-        <button @click="calculate">=</button>
+        <button @click="solveEquation">=</button>
       </div>
-      <div class="grid operations">
+      <div class="grid operators">
         <button @click="getSquareRoot">&radic;</button>
-        <button @click="addOperation('/')">/</button>
-        <button @click="addOperation('*')">*</button>
-        <button @click="addOperation('-')">-</button>
-        <button @click="addOperation('+')">+</button>
+        <button @click="addOperator('/')">/</button>
+        <button @click="addOperator('*')">*</button>
+        <button @click="addOperator('-')">-</button>
+        <button @click="addOperator('+')">+</button>
         <button @click="clearEquation">CE</button>
       </div>
     </div>
@@ -49,14 +47,26 @@ export default {
       answer: '',
       number: '',
       equation: '',
-      lastOperation: '',
-      operations: '+-*/',
+      lastoperator: '',
+      operators: '+-*/',
       nums: [],
       powerOf: 0,
       isPowerOf: false
     }
   },
   methods: {
+    addNumber (number) {
+      this.equation += number
+    },
+    addOperator (operator) {
+      const lastChar = this.equation.substring(this.equation.length - 1, this.equation.length)
+      const isLastCharANumber = Number.isInteger(parseInt(lastChar))
+
+      // concatinate space around operator
+      // restrict adding of operator in a row
+      // e.g. 2 + - * /
+      if (isLastCharANumber) this.equation += ' ' + operator + ' '
+    },
     clearEquation () {
       this.equation = ''
     },
@@ -72,91 +82,67 @@ export default {
     getLog () {
       this.equation = this.equation ? Math.log(this.equation) : ''
     },
-    getSquareRoot () {
-      this.equation = this.equation ? Math.sqrt(this.equation) : ''
+    getPercentage () {
+      this.equation = this.equation ? this.equation / 100 : ''
     },
     getPowerOf () {
       /**
        * Issues to fix
        * - powerOf is not yet working
-       * -
        */
       this.equation = this.equation ? Math.pow(this.equation) : ''
     },
-    getPercentage () {
-      this.equation = this.equation ? this.equation / 100 : ''
-    },
-    addNumber (number) {
-      this.equation += number
-    },
-    addOperation (operation) {
-      console.log(operation)
-      const lastChar = this.equation.substring(this.equation.length - 1, this.equation.length)
-      const isLastCharANumber = Number.isInteger(parseInt(lastChar))
-
-      // restrict adding of operation in a row
-      if (isLastCharANumber) {
-        this.equation += ' ' + operation + ' '
-      }
-    },
-    calculate () {
-      // remove empty items
-      const items = this.equation.split(' ').filter(item => item)
-      let operation = ''
-      this.nums = []
-
-      if (items.length < 3) return
-
-      /**
-       * Issues to fix
-       * - follow MDAS opreration
-       * - restrict alphakeys
-       */
-      items.forEach(item => {
-        if (this.operations.indexOf(item) > -1) {
-          operation = item
-        }
-
-        if (this.operations.indexOf(item) < 0) {
-          this.nums.push(parseFloat(item))
-        }
-
-        // addition
-        if (operation === '+' && this.nums.length === 2) {
-          this.nums = [this.nums[0] + this.nums[1]]
-        }
-
-        // subtraction
-        if (operation === '-' && this.nums.length === 2) {
-          this.nums = [this.nums[0] - this.nums[1]]
-        }
-
-        // mutiplication
-        if (operation === '*' && this.nums.length === 2) {
-          this.nums = [this.nums[0] * this.nums[1]]
-        }
-
-        // divition
-        if (operation === '/' && this.nums.length === 2) {
-          this.nums = [this.nums[0] / this.nums[1]]
-        }
-
-        // display whole number if value has no decimal
-        // otherwise round of to two decimal number
-        this.equation = parseInt(this.nums[0]) === this.nums[0] ? this.nums.toString() : this.nums[0].toFixed(2).toString()
-      })
+    getSquareRoot () {
+      this.equation = this.equation ? Math.sqrt(this.equation) : ''
     },
     restrictNonNumericKeys ($event) {
       const regex = /([0-9+\-*/])/g
       // key must be valid
       if (regex.test($event.key)) {
-        // add space around operators
-        if (this.operations.indexOf($event.key) > -1) return this.addOperation($event.key)
+        // concatinate space around operator
+        if (this.operators.indexOf($event.key) > -1) return this.addOperator($event.key)
         // no space around numbers
         this.equation += $event.key
       }
-      // calculate on press Enter key
-      if ($event.key === 'Enter') this.calculate()
+      // solveEquation on press Enter key
+      if ($event.key === 'Enter') this.solveEquation()
+    },
+    solveEquation () {
+      // remove empty items
+      const items = this.equation.split(' ').filter(item => item)
+      let operator = ''
+      this.nums = []
+
+      // validate atleast two numbers and one operator is present
+      if (items.length < 3) return
+
+      /**
+       * Issues to fix
+       * - follow MDAS opreration
+       */
+      items.forEach(item => {
+        // set operator to use
+        if (this.operators.indexOf(item) > -1) operator = item
+
+        // push new number in array
+        if (this.operators.indexOf(item) < 0) this.nums.push(parseFloat(item))
+
+        // addition
+        if (operator === '+' && this.nums.length === 2) this.nums = [this.nums[0] + this.nums[1]]
+
+        // subtraction
+        if (operator === '-' && this.nums.length === 2) this.nums = [this.nums[0] - this.nums[1]]
+
+        // multiplication
+        if (operator === '*' && this.nums.length === 2) this.nums = [this.nums[0] * this.nums[1]]
+
+        // division
+        if (operator === '/' && this.nums.length === 2) this.nums = [this.nums[0] / this.nums[1]]
+
+        // display whole number if value has no decimal
+        // otherwise round to two decimal number
+        this.equation = parseInt(this.nums[0]) === this.nums[0] ? this.nums.toString() : this.nums[0].toFixed(2).toString()
+      })
     }
   }
 }
