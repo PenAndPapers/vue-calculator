@@ -4,7 +4,7 @@
       type="text"
       autofocus
       v-model="equation"
-      @keypress.stop.prevent="restrictNonNumericKeys"
+      @keypress.stop.prevent="restrictKeys"
     >
     <div class="grid">
       <div class="grid numbers">
@@ -95,7 +95,7 @@ export default {
     getSquareRoot () {
       this.equation = this.equation ? Math.sqrt(this.equation) : ''
     },
-    restrictNonNumericKeys ($event) {
+    restrictKeys ($event) {
       const regex = /([0-9+\-*/])/g
       // key must be valid
       if (regex.test($event.key)) {
