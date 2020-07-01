@@ -22,8 +22,8 @@ html, body {
 
 input, button {
   outline: none;
-  padding: 1.5rem 1rem;
-  font-size: 1.25rem;
+  padding: 1.35rem 1rem;
+  font-size: 1.35rem;
   font-weight: 500;
   height: auto;
   border-radius: 3px;
@@ -33,6 +33,7 @@ input, button {
 @media screen and (min-width: 420px) {
   input, button{
     height: 70px;
+    font-size: 1.5rem;
   }
 }
 

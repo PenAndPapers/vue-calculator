@@ -118,7 +118,7 @@ export default {
 
       /**
        * Issues to fix
-       * - follow MDAS opreration
+       * - follow MDAS rule
        */
       items.forEach(item => {
         // set operator to use
