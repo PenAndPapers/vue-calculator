@@ -23,9 +23,9 @@ html, body {
 
 input, button {
   outline: none;
-  padding: 1rem .5rem;
-  font-size: 1rem;
-  font-weight: 200;
+  padding: 1.5rem .5rem;
+  font-size: 1.15rem;
+  font-weight: 500;
   height: auto;
   border-radius: 3px;
   border: none;
@@ -49,7 +49,6 @@ button {
   background: #253238;
   color: #fff;
   cursor: pointer;
-  font-weight: 500;
 }
 
 button:hover {
